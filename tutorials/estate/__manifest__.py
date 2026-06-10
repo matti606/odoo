@@ -1,4 +1,5 @@
 {
     'name': 'Estate',
-    'depends': ['base']
+    'depends': ['base'],
+    'application': True
 }
