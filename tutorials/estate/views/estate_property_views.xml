@@ -13,6 +13,7 @@
         <field name="arch" type="xml">
             <list string="Properties">
                 <field name="name"/>
+                <field name="property_type_id" />
                 <field name="postcode"/>
                 <field name="bedrooms"/>
                 <field name="living_area"/>
@@ -37,6 +38,7 @@
                     </div>
                     <group class="mb24">
                         <group>
+                            <field name="property_type_id" />
                             <field name="postcode"/>
                             <field name="date_availability"/>
                         </group>
