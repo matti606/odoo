@@ -61,6 +61,12 @@
                                 <field name="state"/>
                             </group>
                         </page>
+                        <page string="Other info">
+                            <group>
+                                <field name="salesman" />
+                                <field name="buyer" />
+                            </group>
+                        </page>
                     </notebook>
                 </sheet>
             </form>
