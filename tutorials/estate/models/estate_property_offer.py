@@ -66,6 +66,7 @@ class EstatePropertyOffer(models.Model):
             record.status = 'accepted'
             record.property_id.buyer = record.partner_id
             record.property_id.selling_price = record.price
+            record.property_id.state = 'offer_accepted'
         return True
 
     def action_refuse_offer(self):
@@ -77,4 +78,5 @@ class EstatePropertyOffer(models.Model):
             ):
                 record.property_id.buyer = False
                 record.property_id.selling_price = False
+                record.property_id.state = 'offer_received'
         return True
