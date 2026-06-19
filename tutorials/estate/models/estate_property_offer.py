@@ -1,6 +1,7 @@
 from datetime import timedelta
 from odoo import models, fields, api
 from odoo.exceptions import UserError
+from odoo.tools.float_utils import float_compare
 
 
 class EstatePropertyOffer(models.Model):
@@ -55,6 +56,25 @@ class EstatePropertyOffer(models.Model):
                     record.create_date.date() or fields.Date.today()
                 )
             ).days
+
+    @api.model
+    def create(self, vals):
+        estate_property = self.env['estate.property'].browse(
+            vals['property_id']
+        )
+
+        if estate_property.offer_ids:
+            lowest_offer = min(estate_property.offer_ids.mapped('price'))
+            offer_too_low = float_compare(
+                vals['price'], lowest_offer, precision_digits=2
+            ) == -1
+            if offer_too_low:
+                raise UserError(
+                    'The offer must be higher then %.2f' % lowest_offer
+                )
+
+        estate_property.state = 'offer_received'
+        return super().create(vals)
 
     def action_accept_offer(self):
         for record in self:
