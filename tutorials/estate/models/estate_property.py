@@ -142,6 +142,8 @@ class EstateProperty(models.Model):
         for record in self:
             if record.state == 'cancelled':
                 raise UserError('Cancelled properties cannot be sold.')
+            if record.state != 'offer_accepted':
+                raise UserError('Accept an offer first before selling')
             record.state = 'sold'
             record.selling_price = record.best_price
         return True
