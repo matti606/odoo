@@ -34,9 +34,25 @@
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
             <kanban>
+                <field name="state" />
                 <templates>
-                    <t t-name="kanban-box">
-                        <field name="name" />
+                    <t t-name="card">
+                        <field name="name" class="fs-5 fw-bold mb-1"/>
+                        <div class="text-muted mb-2">
+                            <div>
+                                <span class="me-1">Expected price:</span>
+                                <field name="expected_price"/>
+                            </div>
+                            <div t-if="record.state.raw_value == 'offer_received'">
+                                <span class="me-1">Best offer:</span>
+                                <field name="best_price" />
+                            </div>
+                            <div t-if="record.state.raw_value == 'offer_accepted'">
+                                <span class="me-1">Selling price:</span>
+                                <field name="selling_price" />
+                            </div>
+                        </div>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                     </t>
                 </templates>
             </kanban>
