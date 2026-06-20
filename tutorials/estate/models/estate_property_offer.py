@@ -1,5 +1,5 @@
 from datetime import timedelta
-from odoo import models, fields, api
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 from odoo.tools.float_utils import float_compare
 
@@ -57,24 +57,25 @@ class EstatePropertyOffer(models.Model):
                 )
             ).days
 
-    @api.model
-    def create(self, vals):
-        estate_property = self.env['estate.property'].browse(
-            vals['property_id']
-        )
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            estate_property = self.env['estate.property'].browse(
+                vals['property_id']
+            )
 
-        if estate_property.offer_ids:
-            lowest_offer = min(estate_property.offer_ids.mapped('price'))
-            offer_too_low = float_compare(
-                vals['price'], lowest_offer, precision_digits=2
-            ) == -1
-            if offer_too_low:
-                raise UserError(
-                    'The offer must be higher then %.2f' % lowest_offer
-                )
+            if estate_property.offer_ids:
+                highest_offer = max(estate_property.offer_ids.mapped('price'))
+                offer_too_low = float_compare(
+                    vals['price'], highest_offer, precision_digits=2
+                ) == -1
+                if offer_too_low:
+                    raise UserError(
+                        'The offer must be higher than %.2f' % highest_offer
+                    )
 
-        estate_property.state = 'offer_received'
-        return super().create(vals)
+            estate_property.state = 'offer_received'
+        return super().create(vals_list)
 
     def action_accept_offer(self):
         for record in self:
@@ -85,7 +86,7 @@ class EstatePropertyOffer(models.Model):
                 raise UserError('An offer is already accepted.')
 
             record.status = 'accepted'
-            record.property_id.buyer = record.partner_id
+            record.property_id.buyer_id = record.partner_id
             record.property_id.selling_price = record.price
             record.property_id.state = 'offer_accepted'
         return True
@@ -97,7 +98,7 @@ class EstatePropertyOffer(models.Model):
                 offer.status == 'accepted'
                 for offer in record.property_id.offer_ids
             ):
-                record.property_id.buyer = False
+                record.property_id.buyer_id = False
                 record.property_id.selling_price = False
                 record.property_id.state = 'offer_received'
         return True

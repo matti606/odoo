@@ -30,7 +30,7 @@
     </record>
 
     <record id="estate_property_view_kanban" model="ir.ui.view">
-        <field name="name">estate.property.view.kanban</field>
+        <field name="name">estate.property.kanban</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
             <kanban default_group_by="property_type_id" groups_draggable="False" records_draggable="False">
@@ -109,8 +109,8 @@
                         </page>
                         <page string="Other info">
                             <group>
-                                <field name="salesman" />
-                                <field name="buyer" />
+                                <field name="salesman_id" />
+                                <field name="buyer_id" />
                             </group>
                         </page>
                     </notebook>
@@ -120,7 +120,7 @@
     </record>
 
     <record id="estate_property_view_search" model="ir.ui.view">
-        <field name="name">estate.property.view.search</field>
+        <field name="name">estate.property.search</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
             <search string="Property">

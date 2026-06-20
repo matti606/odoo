@@ -1,5 +1,5 @@
 from dateutil.relativedelta import relativedelta
-from odoo import models, fields, api
+from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools.float_utils import float_compare, float_is_zero
 
@@ -15,7 +15,7 @@ class EstateProperty(models.Model):
     date_availability = fields.Date(
         'Available from',
         copy=False,
-        default=fields.Date.today() + relativedelta(months=3))
+        default=lambda self: fields.Date.today() + relativedelta(months=3))
     expected_price = fields.Float('Expected price', required=True)
     selling_price = fields.Float('Selling price', readonly=True, copy=False)
     bedrooms = fields.Integer('Bedrooms', default=2)
@@ -50,12 +50,12 @@ class EstateProperty(models.Model):
         'estate.property.type',
         string='Property type'
     )
-    salesman = fields.Many2one(
+    salesman_id = fields.Many2one(
         'res.users',
         string='Salesman',
         default=lambda self: self.env.user
     )
-    buyer = fields.Many2one(
+    buyer_id = fields.Many2one(
         'res.partner',
         string='Buyer',
         copy=False
@@ -109,10 +109,10 @@ class EstateProperty(models.Model):
                 return
 
             min_selling_price = record.expected_price * 0.90
-            valid_selling_price = float_compare(
+            is_valid_selling_price = float_compare(
                 record.selling_price, min_selling_price, precision_digits=2
-            )
-            if valid_selling_price == -1:
+            ) == -1
+            if is_valid_selling_price:
                 raise ValidationError(
                     'The selling price must be at least 90% of the expected '
                     'price! You must reduce the expected price if you want to '
