@@ -73,19 +73,19 @@
                 <sheet>
                     <div class="oe_title mb32">
                         <h1>
-                            <field name="name"/>
+                            <field name="name" readonly="state in ('sold', 'cancelled')"/>
                         </h1>
-                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" readonly="state in ('sold', 'cancelled')"/>
                         <field name="active" invisible="1"/>
                     </div>
                     <group class="mb24">
                         <group>
-                            <field name="property_type_id" options="{'no_create': true, 'no_open': true}"/>
-                            <field name="postcode"/>
-                            <field name="date_availability"/>
+                            <field name="property_type_id" options="{'no_create': true, 'no_open': true}" readonly="state in ('sold', 'cancelled')"/>
+                            <field name="postcode" readonly="state in ('sold', 'cancelled')"/>
+                            <field name="date_availability" readonly="state in ('sold', 'cancelled')"/>
                         </group>
                         <group>
-                            <field name="expected_price"/>
+                            <field name="expected_price" readonly="state in ('offer_accepted', 'sold', 'cancelled')"/>
                             <field name="best_price" />
                             <field name="selling_price"/>
                         </group>
@@ -93,14 +93,14 @@
                     <notebook>
                         <page string="Description">
                             <group>
-                                <field name="description"/>
-                                <field name="bedrooms"/>
-                                <field name="living_area"/>
-                                <field name="facades"/>
-                                <field name="garage"/>
-                                <field name="garden"/>
-                                <field name="garden_area" invisible="not garden"/>
-                                <field name="garden_orientation" invisible="not garden"/>
+                                <field name="description" readonly="state in ('sold', 'cancelled')"/>
+                                <field name="bedrooms" readonly="state in ('sold', 'cancelled')"/>
+                                <field name="living_area" readonly="state in ('sold', 'cancelled')"/>
+                                <field name="facades" readonly="state in ('sold', 'cancelled')"/>
+                                <field name="garage" readonly="state in ('sold', 'cancelled')"/>
+                                <field name="garden" readonly="state in ('sold', 'cancelled')"/>
+                                <field name="garden_area" invisible="not garden" readonly="state in ('sold', 'cancelled')"/>
+                                <field name="garden_orientation" invisible="not garden" readonly="state in ('sold', 'cancelled')"/>
                                 <field name="total_area" />
                             </group>
                         </page>
@@ -109,8 +109,8 @@
                         </page>
                         <page string="Other info">
                             <group>
-                                <field name="salesman_id" />
-                                <field name="buyer_id" />
+                                <field name="salesman_id" readonly="state in ('offer_accepted', 'sold', 'cancelled')"/>
+                                <field name="buyer_id" readonly="state in ('offer_accepted', 'sold', 'cancelled')"/>
                             </group>
                         </page>
                     </notebook>
